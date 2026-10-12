@@ -1,8 +1,8 @@
 class Mdview < Formula
   desc "Preview Markdown files in your default browser"
   homepage "https://github.com/danielhundhausen/mdview"
-  url "https://github.com/danielhundhausen/mdview/releases/download/v0.0.5/mdview-0.0.5.tar.gz"
-  sha256 "263147319d65fd41296d32f24916891337e8aa69ed5e376e5c421f075ffaa3ff"
+  url "https://github.com/danielhundhausen/mdview/releases/download/v0.0.6/mdview-0.0.6.tar.gz"
+  sha256 "664c273d6c6b741716fd4f707fec865e9a4c02c336a4e17d75cb1c567973e7ac"
   license "MIT"
 
   def install
@@ -11,9 +11,11 @@ class Mdview < Formula
 
   test do
     (testpath/"sample.md").write("# Hello\n\n**Markdown** preview.\n\n```mermaid\nflowchart LR\nA --> B\n```\n\n```js\nconst highlighted = true;\n```\n")
-    system bin/"mdview", "--no-open", "-o", "sample.html", "sample.md"
+    system bin/"mdview", "--no-open", "--toc", "-o", "sample.html", "sample.md"
     html = (testpath/"sample.html").read
-    assert_match "<h1>Hello</h1>", html
+    assert_match '<h1 id="hello" tabindex="-1">Hello', html
+    assert_match 'data-heading-id="hello"', html
+    assert_match 'data-mdview-headings', html
     assert_match "<strong>Markdown</strong>", html
     assert_match 'data-mdview-mermaid-runtime="12.1.0"', html
     assert_match 'class="diagram-button diagram-expand"', html
@@ -22,6 +24,6 @@ class Mdview < Formula
     assert_match 'class="language-js"', html
     assert_match 'aria-label="Copy code"', html
     assert_match 'aria-label="Expand diagram"', html
-    assert_match "mdview 0.0.5", shell_output("#{bin}/mdview --version")
+    assert_match "mdview 0.0.6", shell_output("#{bin}/mdview --version")
   end
 end
