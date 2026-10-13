@@ -1,8 +1,8 @@
 class Mdview < Formula
   desc "Preview Markdown files in your default browser"
   homepage "https://github.com/danielhundhausen/mdview"
-  url "https://github.com/danielhundhausen/mdview/releases/download/v0.0.7/mdview-0.0.7.tar.gz"
-  sha256 "03547c4c091db15d018b768d9d122181611cc355a4fa392a3ce874b6a49f044c"
+  url "https://github.com/danielhundhausen/mdview/releases/download/v0.0.8/mdview-0.0.8.tar.gz"
+  sha256 "eb8c805564abe4fe4994713993e62897138c92977ed9a0ebc9e906cb315e51cb"
   license "MIT"
 
   def install
@@ -40,6 +40,6 @@ class Mdview < Formula
     assert_match 'aria-label="Copy code"', html
     assert_match 'aria-label="Expand diagram"', html
     assert_match 'data-mdview-math-runtime="3.2.2"', html
-    assert_match "mdview 0.0.7", shell_output("#{bin}/mdview --version")
+    assert_match "mdview 0.0.8", shell_output("#{bin}/mdview --version")
   end
 end
