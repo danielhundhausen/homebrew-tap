@@ -19,3 +19,12 @@ brew test danielhundhausen/tap/mdview
 ```
 
 MIT license. See [LICENSE](LICENSE).
+
+## Maintaining
+
+CI runs `brew audit --strict` on every push and pull request. To run it
+locally before each commit, enable the bundled hook once:
+
+```sh
+git config core.hooksPath .githooks
+```

@@ -10,12 +10,27 @@ class Mdview < Formula
   end
 
   test do
-    (testpath/"sample.md").write("# Hello\n\n**Markdown** preview.\n\n```mermaid\nflowchart LR\nA --> B\n```\n\n```js\nconst highlighted = true;\n```\n\nInline $E = mc^2$.\n")
+    (testpath/"sample.md").write <<~MARKDOWN
+      # Hello
+
+      **Markdown** preview.
+
+      ```mermaid
+      flowchart LR
+      A --> B
+      ```
+
+      ```js
+      const highlighted = true;
+      ```
+
+      Inline $E = mc^2$.
+    MARKDOWN
     system bin/"mdview", "--no-open", "--toc", "-o", "sample.html", "sample.md"
     html = (testpath/"sample.html").read
     assert_match '<h1 id="hello" tabindex="-1">Hello', html
     assert_match 'data-heading-id="hello"', html
-    assert_match 'data-mdview-headings', html
+    assert_match "data-mdview-headings", html
     assert_match "<strong>Markdown</strong>", html
     assert_match 'data-mdview-mermaid-runtime="12.1.0"', html
     assert_match 'class="diagram-button diagram-expand"', html

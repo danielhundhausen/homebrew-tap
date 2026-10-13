@@ -1,0 +1,22 @@
+#!/bin/sh
+# Run `brew audit --strict` on every formula staged for commit.
+# Enable with: git config core.hooksPath .githooks
+set -eu
+
+tap=danielhundhausen/tap
+formulae=$(git diff --cached --name-only --diff-filter=ACMR -- 'Formula/*.rb' |
+  sed -e 's|^Formula/||' -e 's|\.rb$||')
+[ -n "$formulae" ] || exit 0
+
+# brew audits formulae by name from the installed tap, so this checkout must be it.
+if [ "$(git rev-parse --show-toplevel)" != "$(brew --repository "$tap")" ]; then
+  echo "pre-commit: skipping brew audit; this checkout is not the installed $tap" >&2
+  exit 0
+fi
+
+status=0
+for formula in $formulae; do
+  HOMEBREW_NO_AUTO_UPDATE=1 brew audit --strict --formula "$tap/$formula" || status=1
+done
+[ "$status" -eq 0 ] || echo "pre-commit: brew audit failed; fix the issues or commit with --no-verify" >&2
+exit "$status"

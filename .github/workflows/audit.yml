@@ -1,0 +1,16 @@
+name: audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: macos-latest
+    steps:
+      - name: Set up Homebrew and tap this repository
+        uses: Homebrew/actions/setup-homebrew@main
+
+      - name: Audit formulae
+        run: brew audit --strict --tap danielhundhausen/tap
